@@ -1,101 +1,157 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Header from './Header';
 
 function MyInvestment() {
-    return (
-        <div className="main-wrapper">
-            <Header />
-            <div className='row' style={{marginTop:'40px'}}>
-                <div className='col-sm-3'><Navbar /></div>
-                <div className='col-sm-9'>
-                    <p className='h1'>Investment Report</p>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Investment ID</th>
-                                <th>Investment company</th>
-                                <th>Duration</th>
-                                <th>Type of investment</th>
-                                <th>Target amount</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>INV001</td>
-                                <td>CRDB Bank</td>
-                                <td>3 years</td>
-                                <td>Stock</td>
-                                <td>5,000,000</td>
-                                <td><button className='btn btn-outline-info'
-                                    data-bs-toggle="modal" data-bs-target="#myModal">Details
-                                </button></td>
-                                <td><button className='btn btn-outline-danger'>Teminate</button></td>
-                            </tr>
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sortedData, setSortedData] = useState([]);
+  const [filter, setFilter] = useState('');
+  const [sortField, setSortField] = useState('amount');
+  const userId = localStorage.getItem('userId');
 
-                            <tr>
-                                <td>INV002</td>
-                                <td>EQUITY Bank</td>
-                                <td>1 year</td>
-                                <td>Real estate</td>
-                                <td>4,000,000</td>
-                                <td><button className='btn btn-outline-info'
-                                    data-bs-toggle="modal" data-bs-target="#myModal">Details
-                                </button></td>
-                                <td><button className='btn btn-outline-danger'>Teminate</button></td>
-                            </tr>
+  useEffect(() => {
+    const apiUrl = `http://localhost:2003/api/investment-report/${userId}`;
 
-                        </tbody>
-                    </table>
+    (async () => {
+      try {
+        const response = await fetch(apiUrl);
 
-                    <div className="modal" id="myModal">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
-                                {/* Modal Header */}
-                                <div className="modal-header">
-                                    <h4 className="modal-title">Savin ID:SV001</h4>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
+        const result = await response.json();
+        console.log('Data received:', result);
 
-                                {/* Modal body */}
-                                <div className="modal-body">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Date</th>
-                                                <th>Amount</th>
+        setData(result.data);
+        setSortedData(result.data);
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>TR001</td>
-                                                <td>1-june-2022</td>
-                                                <td>5 month</td>
-                                                <td>100,000</td>
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+        console.error('Error fetching data:', err);
+      }
+    })();
+  }, [userId]);
 
-                                            </tr>
-                                        </tbody>
-                                    </table>
+//========================================== SORTING =====================================
+  // Function to handle sorting
+  const handleSort = (field) => {
+    // Clone the sortedData array to avoid mutating the original data
+    const sorted = [...sortedData];
 
-                                </div>
+    // Sort the data based on the selected field
+    sorted.sort((a, b) => {
+      if (field === 'amount') {
+        return a.amount - b.amount;
+      } else if (field === 'investmentOpt') {
+        return a.investmentOpt.localeCompare(b.investmentOpt);
+      } else {
+        // Handle additional sorting fields here if needed
+        return 0;
+      }
+    });
 
-                                {/* Modal footer */}
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                </div>
+    // Update the state with the sorted data and sorting field
+    setSortedData(sorted);
+    setSortField(field);
+  };
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  // Function to handle filtering
+  const handleFilter = (value) => {
+    setFilter(value);
+  };
+
+  return (
+    <div className="main-wrapper">
+      <Header />
+      <div className='row' style={{ marginTop: '40px' }}>
+        <div className='col-sm-3'><Navbar /></div>
+        <div className='col-sm-9'>
+
+          <div className='row'>
+            <div className='col'><p className='h1'>Investment Report</p></div>
+            <div className='col'>
+              <div className="d-flex justify-content-end">
+                <Link to="/add-investment">
+                  <button className="btn btn-outline-info mx-3">Add Investment</button>
+                </Link>
+              </div>
             </div>
+          </div>
+
+          <div className='row'>
+            <div className='col-sm-6'>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by Investment Option"
+                  value={filter}
+                  onChange={(e) => handleFilter(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className='col-sm-6'>
+              <div className="d-flex justify-content-end">
+                <button
+                  onClick={() => handleSort('amount')}
+                  className={`sort-button ${sortField === 'amount' ? 'active-sort' : ''}`}
+                >
+                  Sort by Amount
+                </button>
+                <button
+                  onClick={() => handleSort('investmentOpt')}
+                  className={`sort-button ${sortField === 'investmentOpt' ? 'active-sort' : ''}`}
+                >
+                  Sort by Investment Option
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : data.length === 0 ? (
+            <p>No data available</p>
+          ) : (
+            <table className="table table-hover table-center mb-0">
+              <thead>
+                <tr>
+                  <th>CDN Account</th>
+                  <th>Company Name</th>
+                  <th>Investment Option</th>
+                  <th>Time for Investment</th>
+                  <th>Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedData
+                  .filter((row) => row.investmentOpt.includes(filter))
+                  .map((row) => (
+                    <tr key={row.id}>
+                      <td>{row.cdnAccount}</td>
+                      <td>{row.companyName}</td>
+                      <td>{row.investmentOpt}</td>
+                      <td>{row.timeForInvestment}</td>
+                      <td>{row.amount}</td>
+                      <td>
+                        <button className='btn btn-outline-primary'>View More</button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default MyInvestment;

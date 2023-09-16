@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimeline } from '@fortawesome/free-solid-svg-icons';
 
 function ExpensesCard() {
-    const [totalAmount, setTotalAmount] = useState(null);
+    const [totalExpenses, setTotalExpenses] = useState(null); // Fix the typo here
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
@@ -15,39 +15,39 @@ function ExpensesCard() {
                 return response.json();
             })
             .then((data) => {
-                setTotalAmount(data.totalAmount);
+                setTotalExpenses(data.totalExpenses);
             })
             .catch((error) => {
-                console.error('Error fetching total savings:', error);
+                console.error('Error fetching total expenses:', error);
             });
     }, []);
 
     return (
         <div>
-        {totalAmount !== null ? (
-          <div className="SavingCard">
-            <div className="card-body">
-              <div className="dash-widget-header">
-                <span className="dash-widget-icon text-primary border-primary">
-                  <FontAwesomeIcon icon={faTimeline} />
-                </span>
-                <div className="dash-count">
-                  <h3>TShs {totalAmount}</h3>
-                  <h4 className="text-muted">My Expenses</h4>
+            {totalExpenses !== null ? (
+                <div className="card">
+                    <div className="card-body">
+                        <div className="dash-widget-header">
+                            <span className="dash-widget-icon text-primary border-primary">
+                                <FontAwesomeIcon icon={faTimeline} />
+                            </span>
+                            <div className="dash-count">
+                                <h3>TShs {totalExpenses}</h3>
+                                <h4 className="text-muted">My Expenses</h4>
+                            </div>
+                        </div>
+                        <div className="dash-widget-info">
+                            <div className="progress progress-sm">
+                                <div className="progress-bar bg-danger" style={{ width: '50%' }}></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div className="dash-widget-info">
-                <div className="progress progress-sm">
-                  <div className="progress-bar bg-danger" style={{ width: '50%' }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
+            ) : (
+                <p>No Data available</p>
+            )}
+        </div>
     );
-  }
+}
 
 export default ExpensesCard;

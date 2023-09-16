@@ -4,6 +4,7 @@ import './Style2.css';
 import request from 'superagent';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import Header from "./Header";
 
 const Registration = () => {
     const [fname, setFname] = useState('');
@@ -38,7 +39,7 @@ const Registration = () => {
 
     return (
         <div className="main-wrapper">
-            {/* ... (Your existing header and navigation code) ... */}
+            <Header />
 
             <div className="container-fluid mt-5">
                 <div className="row">
@@ -50,9 +51,6 @@ const Registration = () => {
                                     <h2> Create account </h2>
                                 </div>
                                 <form>
-                                    {/* ... (Input fields and other form elements) ... */}
-
-
 
                                     <div className="form-group form-focus">
                                         <input type="text"
@@ -92,10 +90,8 @@ const Registration = () => {
                                             onChange={(e) => setPassword(e.target.value)} />
                                         <label className="focus-label">Create Password</label>
                                     </div>
-                                    {/* <Link to='/login'> */}
+
                                     <button className="btn btn-primary btn-block btn-lg login-btn" type="submit" onClick={handleRegistration}>Sign Up</button>
-
-
 
                                     <p className="mt-3">
                                         Already have an account?

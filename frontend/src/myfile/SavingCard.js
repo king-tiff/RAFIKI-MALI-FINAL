@@ -36,7 +36,7 @@ function SavingCard() {
                  </div>
              </div>
              <div className="dash-widget-info">
-                 <h6 className="text-muted">My Investments</h6>
+                 <h6 className="text-muted">My savings</h6>
                  <div className="progress progress-sm">
                      <div className="progress-bar bg-primary w-50"></div>
                  </div>
@@ -44,7 +44,7 @@ function SavingCard() {
          </div>
      </div>
         ) : (
-          <p>Loading...</p>
+          <p>No data available</p>
         )}
       </div>
     );

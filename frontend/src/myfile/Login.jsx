@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Header from './Header';
 import './Style2.css';
 import request from 'superagent';
 import { Link, useNavigate } from 'react-router-dom';
@@ -52,6 +53,7 @@ const Login = () => {
 
     return (
         <div className="main-wrapper">
+            <Header />
             <div className="content">
                 <div className="container-fluid">
                     <div className="row justify-content-center">

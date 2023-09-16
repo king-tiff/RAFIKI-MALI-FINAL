@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Header from './Header';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MySavings() {
     const [data, setData] = useState([]);
+    const [sortedData, setSortedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [filter, setFilter] = useState('');
+    const [sortField, setSortField] = useState('totalAmount'); // Default sorting by totalAmount
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
@@ -23,8 +27,8 @@ function MySavings() {
                 const result = await response.json();
                 console.log('Data received:', result);
 
-                // Assuming that the result.data is an array of records
                 setData(result.data);
+                setSortedData(result.data); // Initialize sortedData with the fetched data
 
                 setLoading(false);
             } catch (err) {
@@ -35,11 +39,32 @@ function MySavings() {
         })();
     }, [userId]);
 
-    console.log(data);
+    // Function to handle sorting
+    const handleSort = (field) => {
+        // Clone the sortedData array to avoid mutating the original data
+        const sorted = [...sortedData];
 
-    // Render the data in a table or other component as needed
+        // Sort the data based on the selected field
+        sorted.sort((a, b) => {
+            if (field === 'totalAmount') {
+                return a.totalAmount - b.totalAmount;
+            } else if (field === 'savingFreq') {
+                return a.savingFreq.localeCompare(b.savingFreq);
+            } else {
+                // Handle additional sorting fields here if needed
+                return 0;
+            }
+        });
 
+        // Update the state with the sorted data and sorting field
+        setSortedData(sorted);
+        setSortField(field);
+    };
 
+    // Function to handle filtering
+    const handleFilter = (value) => {
+        setFilter(value);
+    };
 
     return (
         <div className="main-wrapper">
@@ -47,16 +72,56 @@ function MySavings() {
             <div className='row' style={{ marginTop: '40px' }}>
                 <div className='col-sm-3'><Navbar /></div>
                 <div className='col-sm-9'>
-                    <p className='h1'>Savings Report</p>
-                    <div className="d-flex justify-content-end">
-                        <Link to="/add-savings">
-                            <button className="btn btn-outline-info mx-3">Add savings</button>
-                        </Link>
+                    <div className='row'>
+                        <div className='col'><p className='h1'>Savings Report</p></div>
+                        <div className='col'>
+                            <div className="d-flex justify-content-end">
+                                <Link to="/add-savings">
+                                    <button className="btn btn-outline-info mx-3">Add savings</button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
+
+
+                    <div className='row'>
+                        <div className='col-sm-6'>
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Filter by Purpose"
+                                    value={filter}
+                                    onChange={(e) => handleFilter(e.target.value)}
+                                />
+                            </div>
+
+                        </div>
+                        <div className='col-sm-6'>
+                            <div className="d-flex justify-content-end">
+                                <button
+                                    onClick={() => handleSort('totalAmount')}
+                                    className={`sort-button ${sortField === 'totalAmount' ? 'active-sort' : ''}`}
+                                >
+                                    Sort by Amount
+                                </button>
+
+                                <button
+                                    onClick={() => handleSort('savingFreq')}
+                                    className={`sort-button ${sortField === 'savingFreq' ? 'active-sort' : ''}`}
+                                >
+                                    Sort by Frequency
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
 
                     {loading ? (
                         <p>Loading...</p>
-                    ) : data.length === 0 ? (
+                    ) : sortedData.length === 0 ? (
                         <p>No data available</p>
                     ) : (
                         <table className="table table-hover table-center mb-0">
@@ -75,78 +140,34 @@ function MySavings() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.map((row) => (
-                                    <tr key={row.id}>
-                                        <td>{row.id}</td>
-                                        <td>{row.purpose}</td>
-                                        <td>{row.numDays}</td>
-                                        <td>{row.totalAmount}</td>
-                                        <td>{row.savingType}</td>
-                                        <td>{row.savingFreq}</td>
-                                        <td>{row.currentAmount}</td>
-                                        <td>{row.remainingAmount}</td>
-                                        <td>
-                                            <button className='btn btn-outline-primary'>View More</button>
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-outline-warning'>Add amount</button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {sortedData
+                                    .filter((row) => row.purpose.includes(filter)) // Filter based on 'purpose'
+                                    .map((row) => (
+                                        <tr key={row.id}>
+                                            <td>{row.id}</td>
+                                            <td>{row.purpose}</td>
+                                            <td>{row.numDays}</td>
+                                            <td>{row.totalAmount}</td>
+                                            <td>{row.savingType}</td>
+                                            <td>{row.savingFreq}</td>
+                                            <td>{row.currentAmount}</td>
+                                            <td>{row.remainingAmount}</td>
+                                            <td>
+                                                <button className='btn btn-outline-primary'>View More</button>
+                                            </td>
+                                            <td>
+                                                <button className='btn btn-outline-warning'>Add amount</button>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     )}
 
-
-                    <div className="modal" id="myModal">
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-
-                                {/* Modal Header */}
-                                <div className="modal-header">
-                                    <h4 className="modal-title">Savin ID:SV001</h4>
-                                    <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-
-                                {/* Modal body */}
-                                <div className="modal-body">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Date</th>
-                                                <th>Amount</th>
-
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>TR001</td>
-                                                <td>1-june-2022</td>
-                                                <td>5 month</td>
-                                                <td>100,000</td>
-
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
-                                {/* Modal footer */}
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
+                    {/* Modal code */}
+                    {/* ... (your modal code) ... */}
                 </div>
             </div>
-
-
-
-
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import profile from './Rafikimali-images/profile.png';
+import user from './Rafikimali-images/user.png';
 import './Style2.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSackDollar, faCreditCard, faMoney, faDollar, faDollarSign, faTimeline, faBell, faDumbbell, faConciergeBell, faBellSlash } from '@fortawesome/free-solid-svg-icons';
@@ -42,7 +42,7 @@ function Header() {
                                             <a href="#">
                                                 <div class="media">
                                                     <span class="avatar avatar-sm">
-                                                        <img class="avatar-img rounded-circle" alt="User Image" src={profile} />
+                                                        <img class="avatar-img rounded-circle" alt="User Image" src={user} />
                                                     </span>
                                                     <div class="media-body">
                                                         <p class="noti-details"><span class="noti-title">Dr. Ruby Perrin</span> Schedule <span class="noti-title">her appointment</span></p>
@@ -55,7 +55,7 @@ function Header() {
                                             <a href="#">
                                                 <div class="media">
                                                     <span class="avatar avatar-sm">
-                                                        <img class="avatar-img rounded-circle" alt="User Image" src={profile} />
+                                                        <img class="avatar-img rounded-circle" alt="User Image" src={user} />
                                                     </span>
                                                     <div class="media-body">
                                                         <p class="noti-details"><span class="noti-title">Charlene Reed</span> has booked her appointment to <span class="noti-title">Dr. Ruby Perrin</span></p>
@@ -68,7 +68,7 @@ function Header() {
                                             <a href="#">
                                                 <div class="media">
                                                     <span class="avatar avatar-sm">
-                                                        <img class="avatar-img rounded-circle" alt="User Image" src={profile} />
+                                                        <img class="avatar-img rounded-circle" alt="User Image" src={user} />
                                                     </span>
                                                     <div class="media-body">
                                                         <p class="noti-details"><span class="noti-title">Travis Trimble</span> sent a amount of $210 for his <span class="noti-title">appointment</span></p>
@@ -81,7 +81,7 @@ function Header() {
                                             <a href="#">
                                                 <div class="media">
                                                     <span class="avatar avatar-sm">
-                                                        <img class="avatar-img rounded-circle" alt="User Image" src={profile} />
+                                                        <img class="avatar-img rounded-circle" alt="User Image" src={user} />
                                                     </span>
                                                     <div class="media-body">
                                                         <p class="noti-details"><span class="noti-title">Carl Kelly</span> send a message <span class="noti-title"> to his doctor</span></p>
@@ -100,12 +100,12 @@ function Header() {
 
                         <li class="nav-item dropdown has-arrow">
                             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                <span class="user-img"><img class="rounded-circle" src={profile} width="31" alt="Neema Mtungi" /></span>
+                                <span class="user-img"><img class="rounded-circle" src={user} width="31" alt="Neema Mtungi" /></span>
                             </a>
                             <div class="dropdown-menu">
                                 <div class="user-header">
                                     <div class="avatar avatar-sm">
-                                        <img src={profile} alt="User Image" class="avatar-img rounded-circle" />
+                                        <img src={user} alt="User Image" class="avatar-img rounded-circle" />
                                     </div>
                                     <div class="user-text">
                                         <h6>Ryan Taylor</h6>

@@ -8,7 +8,7 @@ import invest from './Rafikimali-images/invest.png';
 const Banner = () => {
   return (
     // Rafiki mali banner
-<div className="container">
+<div className="main-wrapper">
 <div className="row">
       <div className="col-sm-6 p-3">
         <div className="banner-wrapper">

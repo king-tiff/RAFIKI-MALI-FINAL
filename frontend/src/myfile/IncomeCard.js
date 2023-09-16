@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimeline } from '@fortawesome/free-solid-svg-icons';
 
 function IncomeCard() {
-    const [totalAmount, setTotalAmount] = useState(null);
+    const [totalIncome, setTotalIncome] = useState(null); // Fix the typo here
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
@@ -15,7 +15,7 @@ function IncomeCard() {
                 return response.json();
             })
             .then((data) => {
-                setTotalAmount(data.totalAmount);
+                setTotalIncome(data.totalIncome);
             })
             .catch((error) => {
                 console.error('Error fetching total savings:', error);
@@ -24,30 +24,30 @@ function IncomeCard() {
 
     return (
         <div>
-        {totalAmount !== null ? (
-          <div className="SavingCard">
-            <div className="card-body">
-              <div className="dash-widget-header">
-                <span className="dash-widget-icon text-primary border-primary">
-                  <FontAwesomeIcon icon={faTimeline} />
-                </span>
-                <div className="dash-count">
-                  <h3>TShs {totalAmount}</h3>
-                  <h4 className="text-muted">My Income</h4>
+            {totalIncome !== null ? (
+                <div className="card">
+                    <div className="card-body">
+                        <div className="dash-widget-header">
+                            <span className="dash-widget-icon text-primary border-primary">
+                                <FontAwesomeIcon icon={faTimeline} />
+                            </span>
+                            <div className="dash-count">
+                                <h3>TShs {totalIncome}</h3>
+                                <h4 className="text-muted">My Income</h4>
+                            </div>
+                        </div>
+                        <div className="dash-widget-info">
+                            <div className="progress progress-sm">
+                                <div className="progress-bar bg-warning" style={{ width: '50%' }}></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div className="dash-widget-info">
-                <div className="progress progress-sm">
-                  <div className="progress-bar bg-warning" style={{ width: '50%' }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
+            ) : (
+                <p>No data available</p>
+            )}
+        </div>
     );
-  }
+}
 
 export default IncomeCard;

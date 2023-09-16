@@ -25,7 +25,7 @@ function InvestmentCard() {
     return (
         <div>
         {totalAmount !== null ? (
-          <div className="SavingCard">
+          <div className="card">
             <div className="card-body">
               <div className="dash-widget-header">
                 <span className="dash-widget-icon text-primary border-primary">
@@ -44,7 +44,7 @@ function InvestmentCard() {
             </div>
           </div>
         ) : (
-          <p>Loading...</p>
+          <p>No Data available</p>
         )}
       </div>
     );

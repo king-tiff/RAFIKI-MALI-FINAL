@@ -186,3 +186,20 @@
 .footer .social-icon ul li a:hover {
 	color: #09e5ab;
 }
+
+/* styles.css (or your CSS module file) */
+.sort-button {
+	padding: 5px 10px;
+	margin-right: 10px;
+	cursor: pointer;
+	background-color: #f0f0f0;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+  }
+  
+  .active-sort {
+	background-color: #007bff; /* Change this to your desired active button color */
+	color: #fff; /* Change this to your desired text color for active button */
+	border: 1px solid #007bff;
+  }
+  

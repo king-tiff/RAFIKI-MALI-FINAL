@@ -217,7 +217,7 @@ app.delete('/api/income-delete/:id', (req, res) => {
 app.get('/api/total-income/:userId', (req, res) => {
   const userId = req.params.userId;
   const sqlQuery = `
-    SELECT SUM(amount) AS total_amount
+    SELECT SUM(amount) AS total_income
     FROM income
     WHERE userId = ?`;
  
@@ -229,11 +229,11 @@ app.get('/api/total-income/:userId', (req, res) => {
     }
 
     // Extract the total amount from the query results
-    const totalAmount = results[0].total_amount;
+    const totalIncome = results[0].total_income;
 
     res.status(200).json({ 
       error: false, 
-      totalAmount: totalAmount 
+      totalIncome: totalIncome 
     });
   });
 });
@@ -298,7 +298,7 @@ app.get('/api/expenses-report/:userId', (req, res) => {
 app.get('/api/total-expenses/:userId', (req, res) => {
   const userId = req.params.userId;
   const sqlQuery = `
-    SELECT SUM(amount) AS total_amount
+    SELECT SUM(amount) AS total_expenses
     FROM expenses
     WHERE userId = ?`;
  
@@ -309,12 +309,12 @@ app.get('/api/total-expenses/:userId', (req, res) => {
       return res.status(500).json({ error: true, message: 'Failed to fetch data' });
     }
 
-    // Extract the total amount from the query results
-    const totalAmount = results[0].total_amount;
+    // Extract the total Expenses from the query results
+    const totalExpenses = results[0].total_expenses;
 
     res.status(200).json({ 
       error: false, 
-      totalAmount: totalAmount 
+      totalExpenses: totalExpenses 
     });
   });
 });
@@ -486,19 +486,68 @@ app.post('/api/add-investment',(req, res)=>{
 
 })
 
+//get investment element by id 
+app.get('/api/investment-report/:userId', (req, res) => {
+  // Extract the user ID from the request parameters
+  const userId = req.params.userId;
+
+  // Construct the SQL query to retrieve all savings records for the specified user
+  const query = 'SELECT * FROM investment WHERE userId = ?';
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching data:', err);
+      return res.status(500).json({ error: true, message: 'Failed to fetch data' });
+    }
+
+    return res.status(200).json({ 
+      error: false, 
+      data: results,
+    });
+  });
+});
+
 //total investment
+// app.get('/api/total-investment/:userId', (req, res) => {
+//   const userId = req.params.userId;
+//   const sqlQuery = `
+//     SELECT SUM(amount) AS total_amount
+//     FROM investment
+//     WHERE userId = ?`;
+ 
+
+//   db.query(sqlQuery, [userId], (err, results) => {
+//     if (err) {
+//       console.error('Error executing SQL query:', err);
+//       return res.status(500).json({ error: true, message: 'Failed to fetch data' });
+//     }
+
+//     // Extract the total amount from the query results
+//     const totalAmount = results[0].total_amount;
+
+//     res.status(200).json({ 
+//       error: false, 
+//       totalAmount: totalAmount 
+//     });
+//   });
+// });
+
 app.get('/api/total-investment/:userId', (req, res) => {
   const userId = req.params.userId;
   const sqlQuery = `
     SELECT SUM(amount) AS total_amount
     FROM investment
     WHERE userId = ?`;
- 
 
-  db.query(sqlQuery, [userId], (err, results) => {
+  db.query(sqlQuery, userId, (err, results) => { // Remove the array brackets around userId
     if (err) {
       console.error('Error executing SQL query:', err);
       return res.status(500).json({ error: true, message: 'Failed to fetch data' });
+    }
+
+    // Check if there are no results
+    if (results.length === 0 || results[0].total_amount === null) {
+      return res.status(404).json({ error: true, message: 'No data found for the user' });
     }
 
     // Extract the total amount from the query results

@@ -12,12 +12,13 @@ const AddInvestment = () => {
     const [investmentOpt, setInvestmenrOpt] = useState('');
     const [timeForInvestment, setTimeForInvestment] = useState('');
     const [amount, setAmount] = useState('');
-    const userId = sessionStorage.getItem('userId');
+    // const userId = sessionStorage.getItem('userId');
+    const [userId, setUserId] = useState('');
     const [message, setMessage] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
     const navigate =useNavigate();
-
+console.log(userId);
     useEffect(() => {
         if (message) {
           setShowAlert(true);
@@ -25,6 +26,11 @@ const AddInvestment = () => {
           setShowAlert(false);
         }
       }, [message]);
+
+      useEffect(() => {
+        setUserId(localStorage.getItem('userId'));
+    }, []);
+   console.log(userId);
     
       const handleInvestment = (e) => {
         e.preventDefault();
@@ -34,7 +40,7 @@ const AddInvestment = () => {
         console.log('Sending data:', data);
     
         request
-          .post('http://localhost:2003/add-investment')
+          .post('http://localhost:2003/api/add-investment')
           .send(data)
           .set('Content-Type', 'application/json')
           .then(response => {

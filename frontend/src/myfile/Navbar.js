@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import profile from './Rafikimali-images/profile.png';
+// import profile from './Rafikimali-images/profile.png';
+import user from './Rafikimali-images/user.png';
 import './Style2.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
@@ -22,7 +23,7 @@ function Navbar() {
                 <div className="widget-profile pro-widget-content">
                     <div className="profile-info-widget">
                         <a href="#" className="booking-doc-img">
-                            <img src={profile} alt='profile' />
+                            <img src={user} alt='profile' />
                         </a>
                         <div className="profile-det-info">
                             <h3>{fname} {lname}</h3>
